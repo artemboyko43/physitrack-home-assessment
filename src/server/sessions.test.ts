@@ -81,9 +81,7 @@ describe("POST /sessions", () => {
     const conflict = await post(BEN, ADA_SESSION);
 
     expect(conflict.status).toBe(409);
-    const body = await conflict.json();
-    expect(body).toEqual({ error: "Conflict" });
-    expect(JSON.stringify(body)).not.toContain(ADA_SESSION.performedAt);
+    expect(await conflict.json()).toEqual({ error: "Conflict" });
     expect(await (await get(BEN)).json()).toEqual([]);
   });
 

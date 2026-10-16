@@ -93,7 +93,7 @@ async function readBody(c: Context<Env>): Promise<SessionBody | undefined> {
   }
 }
 
-export function parseSessionBody(value: unknown): SessionBody | undefined {
+function parseSessionBody(value: unknown): SessionBody | undefined {
   if (value === null || typeof value !== "object" || Array.isArray(value)) return undefined;
 
   const record = value as Record<string, unknown>;

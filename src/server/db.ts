@@ -49,11 +49,8 @@ export function listSessions(db: DatabaseSync, userId: string): StoredSession[] 
   return rows.map((row) => readSession(row)).sort(newestFirst);
 }
 
-export function insertSession(
-  db: DatabaseSync,
-  session: Omit<StoredSession, "createdAt"> & { createdAt?: string },
-): StoredSession {
-  const createdAt = session.createdAt ?? new Date().toISOString();
+export function insertSession(db: DatabaseSync, session: Omit<StoredSession, "createdAt">): StoredSession {
+  const createdAt = new Date().toISOString();
   db.prepare(
     `INSERT INTO sessions (session_id, user_id, reps, duration_sec, performed_at, created_at)
      VALUES (?, ?, ?, ?, ?, ?)`,

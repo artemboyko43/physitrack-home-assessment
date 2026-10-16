@@ -8,7 +8,6 @@
   --accent-ink: #ffffff;
   --ok: #1f7a32;
   --bad: #9f2d1c;
-  --code: #eaf0f0;
   color-scheme: light;
   font-family: "Public Sans", system-ui, sans-serif;
   background: var(--bg);
@@ -26,7 +25,6 @@
     --accent-ink: #0f1719;
     --ok: #8ed99a;
     --bad: #f0a090;
-    --code: #1b2a2e;
     color-scheme: dark;
   }
 }

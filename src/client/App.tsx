@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { countReps } from "../counter/countReps";
-import { fetchSessions, saveSession, sessionPayload, type SavedSession } from "./api";
+import { fetchSessions, saveSession, type SavedSession } from "./api";
 import { FIXTURES, type FixtureChoice } from "./fixtures";
 import { formatDuration, formatWhen } from "./format";
 
@@ -87,7 +87,7 @@ export function App() {
     if (result === null || save.status === "saving") return;
     const savingPatient = patient;
     setSave({ status: "saving" });
-    const outcome = await saveSession(savingPatient.token, sessionPayload(result));
+    const outcome = await saveSession(savingPatient.token, result);
     if (patientRef.current.id !== savingPatient.id) return;
 
     if (outcome.status === "error") {
@@ -117,7 +117,6 @@ export function App() {
                 name="patient"
                 value={choice.id}
                 checked={patient.id === choice.id}
-                data-testid={`patient-${choice.id}`}
                 onChange={() => selectPatient(choice)}
               />
               <span>{choice.name}</span>
@@ -136,7 +135,6 @@ export function App() {
                 name="fixture"
                 value={choice.id}
                 checked={fixture.id === choice.id}
-                data-testid={`fixture-${choice.id}`}
                 onChange={() => setFixture(choice)}
               />
               <span>
@@ -149,7 +147,7 @@ export function App() {
       </fieldset>
 
       <div className="actions">
-        <button type="button" data-testid="count" onClick={onCount}>
+        <button type="button" onClick={onCount}>
           Count
         </button>
       </div>
@@ -158,28 +156,28 @@ export function App() {
         <section className="panel" aria-label="Count result">
           <p className="file">{result.fixtureFile}</p>
           <p className="figure">
-            <span data-testid="reps">{result.reps}</span> reps
+            <span>{result.reps}</span> reps
             <span className="dot" aria-hidden="true">
               ·
             </span>
-            <span data-testid="duration">{formatDuration(result.durationSec)}</span>
+            <span>{formatDuration(result.durationSec)}</span>
           </p>
           <p className="meta">
             <span>{formatWhen(result.performedAt)}</span>
-            <code data-testid="session-id">{result.sessionId}</code>
+            <code>{result.sessionId}</code>
           </p>
           <div className="actions">
-            <button type="button" data-testid="save" onClick={() => void onSave()} disabled={save.status === "saving"}>
+            <button type="button" onClick={() => void onSave()} disabled={save.status === "saving"}>
               {save.status === "error" ? "Retry" : save.status === "saving" ? "Saving…" : "Save"}
             </button>
           </div>
           {save.status === "saved" || save.status === "duplicate" ? (
-            <p role="status" className="status ok" data-testid="save-status">
+            <p role="status" className="status ok">
               {save.status === "saved" ? "Saved." : "Already saved."}
             </p>
           ) : null}
           {save.status === "error" ? (
-            <p role="alert" className="status bad" data-testid="save-status">
+            <p role="alert" className="status bad">
               {save.message} The same session id will be sent again.
             </p>
           ) : null}
@@ -190,17 +188,17 @@ export function App() {
         <h2 id="history-heading">{patient.name}&apos;s sessions</h2>
         {list.status === "loading" ? <p>Loading sessions…</p> : null}
         {list.status === "error" ? (
-          <p role="alert" className="status bad" data-testid="list-error">
+          <p role="alert" className="status bad">
             {list.message}
           </p>
         ) : null}
         {list.status === "ready" && list.sessions.length === 0 ? (
-          <p data-testid="empty-sessions">No sessions yet.</p>
+          <p>No sessions yet.</p>
         ) : null}
         {list.status === "ready" && list.sessions.length > 0 ? (
-          <ul className="sessions" data-testid="session-list">
+          <ul className="sessions">
             {list.sessions.map((session) => (
-              <li key={session.sessionId} data-testid="session-row">
+              <li key={session.sessionId}>
                 <span>{formatWhen(session.performedAt)}</span>
                 <span>{session.reps} reps</span>
                 <span>{formatDuration(session.durationSec)}</span>

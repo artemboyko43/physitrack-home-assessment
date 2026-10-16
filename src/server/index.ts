@@ -7,15 +7,15 @@ import { createApp } from "./sessions";
 
 const defaultDatabasePath = path.resolve(process.cwd(), "data/sessions.db");
 
-export function startServer(options?: { port?: number; databasePath?: string }): void {
-  const databasePath = options?.databasePath ?? process.env.DATABASE_PATH ?? defaultDatabasePath;
+function startServer(): void {
+  const databasePath = process.env.DATABASE_PATH ?? defaultDatabasePath;
   if (databasePath !== ":memory:") {
     mkdirSync(path.dirname(databasePath), { recursive: true });
   }
 
   const db = openDatabase(databasePath);
   const app = createApp(db);
-  const port = options?.port ?? Number(process.env.PORT ?? 3001);
+  const port = Number(process.env.PORT ?? 3001);
 
   serve({ fetch: app.fetch, port }, (info) => {
     console.log(`sessions api listening on http://localhost:${info.port}`);

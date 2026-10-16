@@ -15,14 +15,20 @@ describe("formatDuration", () => {
 
 describe("sessionPayload", () => {
   it("keeps only the four result fields", () => {
-    const payload = sessionPayload({
+    const counted = {
       sessionId: "6f1b1c3e-8a2d-4e5f-9c0b-1a2b3c4d5e6f",
       reps: 10,
       durationSec: clean.angles.length / clean.sampleRateHz,
       performedAt: "2026-10-16T08:00:00.000Z",
-    });
+      fixtureFile: "session-clean.json",
+      angles: clean.angles,
+    };
 
-    expect(Object.keys(payload).sort()).toEqual(["durationSec", "performedAt", "reps", "sessionId"]);
-    expect(payload).not.toHaveProperty("angles");
+    expect(sessionPayload(counted)).toEqual({
+      sessionId: counted.sessionId,
+      reps: counted.reps,
+      durationSec: counted.durationSec,
+      performedAt: counted.performedAt,
+    });
   });
 });
